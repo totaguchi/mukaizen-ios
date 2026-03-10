@@ -62,9 +62,7 @@ struct NotToDoCard: View {
         case .money:
             return "¥\(Int(total).formatted())"
         case .time:
-            let h = Int(total) / 60
-            let m = Int(total) % 60
-            return h > 0 ? "\(h)時間\(m)分" : "\(Int(total))分"
+            return formatMinutes(Int(total))
         case .count:
             return "\(Int(total))回"
         }

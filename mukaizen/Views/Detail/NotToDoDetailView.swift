@@ -7,8 +7,13 @@ struct NotToDoDetailView: View {
 
     @Query private var items: [NotToDoItem]
 
+    init(itemId: UUID) {
+        self.itemId = itemId
+        _items = Query(filter: #Predicate<NotToDoItem> { $0.id == itemId })
+    }
+
     private var item: NotToDoItem? {
-        items.first { $0.id == itemId }
+        items.first
     }
 
     var body: some View {

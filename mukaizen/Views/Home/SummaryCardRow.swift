@@ -31,11 +31,7 @@ struct SummaryCardRow: View {
     }
 
     private var formattedTime: String {
-        let total = Int(todayTime)
-        if total >= 60 {
-            return "\(total / 60)時間\(total % 60)分"
-        }
-        return "\(total)分"
+        formatMinutes(Int(todayTime))
     }
 
     private var formattedCount: String { "\(Int(todayCount))回" }
