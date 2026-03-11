@@ -33,24 +33,31 @@ struct HomeView: View {
                 } else {
                     LazyVGrid(columns: gridColumns, spacing: 12) {
                         ForEach(sortedItems) { item in
-                            NavigationLink(value: item.id) {
-                                NotToDoCard(
-                                    item: item,
-                                    onIconTap: {
+                            // ZStackでRecordTypeIconをcontextMenu範囲の外に配置し、
+                            // ロングプレスのジェスチャー競合を防ぐ
+                            ZStack(alignment: .topTrailing) {
+                                NavigationLink(value: item.id) {
+                                    NotToDoCard(item: item)
+                                }
+                                .buttonStyle(.plain)
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        viewModel.deleteItem(item, context: modelContext)
+                                    } label: {
+                                        Label("削除", systemImage: "trash")
+                                    }
+                                }
+
+                                RecordTypeIcon(
+                                    type: item.recordType,
+                                    onTap: {
                                         viewModel.handleIconTap(item: item, context: modelContext)
                                     },
-                                    onIconLongPress: {
+                                    onLongPress: {
                                         viewModel.handleIconLongPress(item: item)
                                     }
                                 )
-                            }
-                            .buttonStyle(.plain)
-                            .contextMenu {
-                                Button(role: .destructive) {
-                                    viewModel.deleteItem(item, context: modelContext)
-                                } label: {
-                                    Label("削除", systemImage: "trash")
-                                }
+                                .padding(12)
                             }
                         }
                     }

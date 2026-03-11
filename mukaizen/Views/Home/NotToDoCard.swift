@@ -2,12 +2,10 @@ import SwiftUI
 
 struct NotToDoCard: View {
     let item: NotToDoItem
-    let onIconTap: () -> Void
-    let onIconLongPress: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            // 上段: ピン留め + 記録タイプアイコン
+            // 上段: ピン留め（アイコンはHomeViewのオーバーレイで表示）
             HStack(alignment: .top) {
                 Image(systemName: "pin.fill")
                     .font(.caption)
@@ -16,11 +14,8 @@ struct NotToDoCard: View {
 
                 Spacer()
 
-                RecordTypeIcon(
-                    type: item.recordType,
-                    onTap: onIconTap,
-                    onLongPress: onIconLongPress
-                )
+                // RecordTypeIconと同サイズのスペースを確保
+                Color.clear.frame(width: 44, height: 44)
             }
 
             // タイトル（最大2行）
