@@ -13,10 +13,10 @@ final class DashboardViewModel {
 
         var startDate: Date {
             let calendar = Calendar.current
-            let now = Date()
+            let todayStart = calendar.startOfDay(for: Date())
             switch self {
-            case .weekly:  return calendar.date(byAdding: .weekOfYear, value: -1, to: now)!
-            case .monthly: return calendar.date(byAdding: .month, value: -1, to: now)!
+            case .weekly:  return calendar.date(byAdding: .weekOfYear, value: -1, to: todayStart)!
+            case .monthly: return calendar.date(byAdding: .month, value: -1, to: todayStart)!
             }
         }
     }
@@ -43,10 +43,11 @@ final class DashboardViewModel {
         let startDate = selectedPeriod.startDate
         var counts: [String: Int] = [:]
         for item in items {
-            let count = item.records.filter { $0.recordedAt >= startDate }.count
-            guard count > 0 else { continue }
+            let periodRecords = item.records.filter { $0.recordedAt >= startDate }
+            guard !periodRecords.isEmpty else { continue }
+            let incidents = incidentCount(for: periodRecords, type: item.recordType)
             for tag in item.tags {
-                counts[tag, default: 0] += count
+                counts[tag, default: 0] += incidents
             }
         }
         return counts
@@ -60,8 +61,9 @@ final class DashboardViewModel {
         let startDate = selectedPeriod.startDate
         let sorted = items
             .compactMap { item -> (item: NotToDoItem, count: Int)? in
-                let count = item.records.filter { $0.recordedAt >= startDate }.count
-                guard count > 0 else { return nil }
+                let periodRecords = item.records.filter { $0.recordedAt >= startDate }
+                guard !periodRecords.isEmpty else { return nil }
+                let count = incidentCount(for: periodRecords, type: item.recordType)
                 return (item: item, count: count)
             }
             .sorted { $0.count > $1.count }
@@ -72,6 +74,15 @@ final class DashboardViewModel {
     }
 
     // MARK: - Private
+
+    /// RecordType.count は record.value が実際の回数を保持するため合計を使用。
+    /// money / time は 1 レコード = 1 インシデントとして件数を使用。
+    private func incidentCount(for records: [Record], type: RecordType) -> Int {
+        switch type {
+        case .count: return Int(records.reduce(0) { $0 + $1.value })
+        case .money, .time: return records.count
+        }
+    }
 
     private func periodRecords(type: RecordType, from items: [NotToDoItem]) -> [Record] {
         let startDate = selectedPeriod.startDate

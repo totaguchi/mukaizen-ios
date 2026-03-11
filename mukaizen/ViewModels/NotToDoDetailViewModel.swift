@@ -29,8 +29,9 @@ final class NotToDoDetailViewModel {
 
     // MARK: - Actions
 
-    func deleteRecord(_ record: Record, context: ModelContext) {
+    func deleteRecord(_ record: Record, for item: NotToDoItem, context: ModelContext) {
         context.delete(record)
+        item.updatedAt = Date()
     }
 
     func togglePin(item: NotToDoItem) {

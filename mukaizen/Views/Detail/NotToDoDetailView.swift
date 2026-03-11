@@ -6,7 +6,6 @@ struct NotToDoDetailView: View {
     let itemId: UUID
 
     @Query private var items: [NotToDoItem]
-    @Environment(\.modelContext) private var modelContext
     @State private var viewModel = NotToDoDetailViewModel()
 
     init(itemId: UUID) {
@@ -89,7 +88,7 @@ private struct DetailContentView: View {
                     .onDelete { offsets in
                         let records = sortedRecords
                         for index in offsets {
-                            viewModel.deleteRecord(records[index], context: modelContext)
+                            viewModel.deleteRecord(records[index], for: item, context: modelContext)
                         }
                     }
                 }

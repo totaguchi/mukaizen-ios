@@ -15,12 +15,12 @@ final class HistoryViewModel {
 
         var startDate: Date {
             let calendar = Calendar.current
-            let now = Date()
+            let today = calendar.startOfDay(for: Date())
             switch self {
-            case .oneMonth:    return calendar.date(byAdding: .month, value: -1,  to: now)!
-            case .threeMonths: return calendar.date(byAdding: .month, value: -3,  to: now)!
-            case .sixMonths:   return calendar.date(byAdding: .month, value: -6,  to: now)!
-            case .oneYear:     return calendar.date(byAdding: .year,  value: -1,  to: now)!
+            case .oneMonth:    return calendar.date(byAdding: .month, value: -1, to: today)!
+            case .threeMonths: return calendar.date(byAdding: .month, value: -3, to: today)!
+            case .sixMonths:   return calendar.date(byAdding: .month, value: -6, to: today)!
+            case .oneYear:     return calendar.date(byAdding: .year,  value: -1, to: today)!
             }
         }
     }
@@ -41,6 +41,9 @@ final class HistoryViewModel {
     }
 
     func deleteRecord(_ record: Record, context: ModelContext) {
+        if let item = record.item {
+            item.updatedAt = Date()
+        }
         context.delete(record)
     }
 }
