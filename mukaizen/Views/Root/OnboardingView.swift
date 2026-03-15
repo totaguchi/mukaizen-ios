@@ -1,13 +1,20 @@
 import SwiftUI
 
+private struct OnboardingFeature: Identifiable {
+    let id = UUID()
+    let title: String
+    let description: String
+    let systemImage: String
+}
+
 struct OnboardingView: View {
     @AppStorage("hasLaunchedBefore") private var hasLaunchedBefore = false
     @Environment(\.dismiss) private var dismiss
 
-    private let features: [(title: String, description: String, systemImage: String)] = [
-        ("無駄づかいを記録", "衝動買いや不要な出費を金額で残す", "yensign.circle.fill"),
-        ("浪費時間を可視化", "ダラダラSNSや先延ばしを時間で記録", "timer"),
-        ("悪習慣の回数を把握", "繰り返す行動をカウントして傾向を掴む", "arrow.clockwise"),
+    private let features: [OnboardingFeature] = [
+        OnboardingFeature(title: "無駄づかいを記録", description: "衝動買いや不要な出費を金額で残す", systemImage: "yensign.circle.fill"),
+        OnboardingFeature(title: "浪費時間を可視化", description: "ダラダラSNSや先延ばしを時間で記録", systemImage: "timer"),
+        OnboardingFeature(title: "悪習慣の回数を把握", description: "繰り返す行動をカウントして傾向を掴む", systemImage: "arrow.clockwise"),
     ]
 
     var body: some View {
@@ -36,7 +43,7 @@ struct OnboardingView: View {
 
             // 機能説明カード
             VStack(spacing: 12) {
-                ForEach(features, id: \.title) { feature in
+                ForEach(features) { feature in
                     OnboardingFeatureRow(
                         title: feature.title,
                         description: feature.description,

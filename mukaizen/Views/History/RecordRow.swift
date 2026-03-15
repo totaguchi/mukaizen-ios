@@ -79,6 +79,9 @@ struct RecordRow: View {
         if let memo = record.memo, !memo.isEmpty {
             parts.append(memo)
         }
+        if showsItemInfo, let item = record.item, !item.tags.isEmpty {
+            parts.append(item.tags.joined(separator: "、"))
+        }
         return parts.joined(separator: "、")
     }
 }

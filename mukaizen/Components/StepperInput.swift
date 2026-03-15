@@ -5,7 +5,7 @@ struct StepperButton: View {
     let systemName: String
     let action: () -> Void
 
-    @ScaledMetric private var size = 80.0
+    @ScaledMetric private var size: CGFloat = 80
 
     var body: some View {
         Button(action: action) {
