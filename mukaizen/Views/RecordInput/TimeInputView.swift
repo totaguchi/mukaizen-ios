@@ -127,18 +127,3 @@ struct TimeInputView: View {
     }
 }
 
-// ステッパーボタン（TimeInputView / CountInputView で共用）
-struct StepperButton: View {
-    let systemName: String
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.title.weight(.medium))
-                .frame(width: 80, height: 80)
-                .background(Color(.secondarySystemBackground))
-                .clipShape(.circle)
-        }
-    }
-}

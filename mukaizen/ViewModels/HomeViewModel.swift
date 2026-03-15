@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UIKit
 
 @Observable
 @MainActor
@@ -62,5 +63,6 @@ final class HomeViewModel {
         item.records.append(record)
         item.updatedAt = Date()
         context.insert(record)
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
     }
 }
