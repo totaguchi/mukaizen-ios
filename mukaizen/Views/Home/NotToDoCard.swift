@@ -26,12 +26,14 @@ struct NotToDoCard: View {
 
             Spacer(minLength: 0)
 
-            // 累計値
+            // 累計値（変化時にアニメーション）
             Text(formattedTotal)
                 .font(.title2.bold())
                 .foregroundStyle(Color.accentColor)
                 .minimumScaleFactor(0.7)
                 .lineLimit(1)
+                .contentTransition(.numericText())
+                .animation(.spring, value: formattedTotal)
 
             // タグ
             if !item.tags.isEmpty {
@@ -49,6 +51,8 @@ struct NotToDoCard: View {
         .frame(maxWidth: .infinity)
         .background(Color(.secondarySystemBackground))
         .clipShape(.rect(cornerRadius: 14))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(cardAccessibilityLabel)
     }
 
     private var formattedTotal: String {
@@ -61,5 +65,13 @@ struct NotToDoCard: View {
         case .count:
             return "\(Int(total))回"
         }
+    }
+
+    private var cardAccessibilityLabel: String {
+        var parts: [String] = [item.title]
+        if item.isPinned { parts.append("ピン留め") }
+        parts.append("累計 \(formattedTotal)")
+        if !item.tags.isEmpty { parts.append(item.tags.joined(separator: "、")) }
+        return parts.joined(separator: "、")
     }
 }

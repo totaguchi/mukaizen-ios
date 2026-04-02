@@ -21,5 +21,12 @@ struct RecordTypeIcon: View {
         .onLongPressGesture(minimumDuration: 0.5, pressing: { _ in }, perform: {
             onLongPress?()
         })
+        .accessibilityLabel(type.label + "を記録")
+        .accessibilityHint(
+            type == .count
+                ? "タップで1回追加。長押しで回数入力画面を開く"
+                : "タップで\(type.label)入力画面を開く"
+        )
+        .accessibilityAddTraits(.isButton)
     }
 }

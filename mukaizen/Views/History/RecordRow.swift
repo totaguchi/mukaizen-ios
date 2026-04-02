@@ -56,6 +56,8 @@ struct RecordRow: View {
             }
         }
         .padding(.vertical, 4)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(rowAccessibilityLabel)
     }
 
     private var formattedValue: String {
@@ -65,5 +67,21 @@ struct RecordRow: View {
         case .time:  return formatMinutes(Int(record.value))
         case .count: return "\(Int(record.value))回"
         }
+    }
+
+    private var rowAccessibilityLabel: String {
+        var parts: [String] = []
+        if showsItemInfo, let item = record.item {
+            parts.append(item.title)
+        }
+        parts.append(formattedValue)
+        parts.append(record.recordedAt.formatted(date: .abbreviated, time: .shortened))
+        if let memo = record.memo, !memo.isEmpty {
+            parts.append(memo)
+        }
+        if showsItemInfo, let item = record.item, !item.tags.isEmpty {
+            parts.append(item.tags.joined(separator: "、"))
+        }
+        return parts.joined(separator: "、")
     }
 }

@@ -14,5 +14,6 @@ struct TagChip: View {
         .padding(.vertical, 4)
         .background(Color(.systemFill))
         .clipShape(.capsule)
+        .accessibilityLabel("タグ: \(name)")
     }
 }

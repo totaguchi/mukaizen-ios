@@ -56,10 +56,14 @@ private struct SummaryCard: View {
                 .font(.subheadline.bold())
                 .minimumScaleFactor(0.7)
                 .lineLimit(1)
+                .contentTransition(.numericText())
+                .animation(.spring, value: value)
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(.secondarySystemBackground))
         .clipShape(.rect(cornerRadius: 12))
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("今日の\(title)、\(value)")
     }
 }
